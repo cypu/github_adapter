@@ -1,3 +1,7 @@
+"""
+This file is responsible for running application server.
+"""
+
 from api import app
 
 
