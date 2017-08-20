@@ -10,7 +10,7 @@ from flask_restful import Api
 from api.repos import CreatePullRequest
 
 
-class TestCaseUser(TestCase):
+class TestCaseRepo(TestCase):
 
     def create_app(self):
 
@@ -27,3 +27,16 @@ class TestCaseUser(TestCase):
         self.assertEqual(response.status_code, 401)
         json.loads(response.data)
         self.assertEqual(json.loads(response.data), {'message': 'Missing authorization token'})
+
+    def test_pull_request_correct_data(self):
+
+        post_data = {
+            'changeset': '',
+            'repository': '',
+            'title': '',
+            'base': 'master',
+            'token': '',
+            'reviewers': ''
+        }
+        response = self.client.post("/repos/create_pull_request/", data=post_data)
+        self.assertEqual(response.status_code, 201)
