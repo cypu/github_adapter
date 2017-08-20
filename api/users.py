@@ -3,7 +3,8 @@ API endpoints related to users.
 """
 
 import requests
-from flask_restful import Resource
+import base64
+from flask_restful import Resource, reqparse
 from . import app
 
 
@@ -26,3 +27,26 @@ class GetFollowers(Resource):
             followers[index] = {x: follower_details[x] for x in follower_fields}
 
         return followers
+
+
+class Login(Resource):
+    """
+    Provide login.
+    """
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('login')
+        parser.add_argument('password')
+        args = parser.parse_args()
+        username = args['login']
+        password = args['password']
+
+        url = 'https://api.github.com/user'
+        passanduser = base64.urlsafe_b64encode(bytes("%s:%s" % (username, password), 'utf-8')).decode('ascii')
+
+        headers = {'Authorization': 'Basic ' + passanduser}
+
+        r = requests.get(url, headers=headers)
+
+        return
