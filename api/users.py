@@ -31,22 +31,34 @@ class GetFollowers(Resource):
 
 class Login(Resource):
     """
-    Provide login.
+    Provide authorisation to API.
     """
 
     def post(self):
+        """Handling log in operation  
+        
+        :return: json with message about authorisation status, response status code.
+                 returns authorisation token when credentials are correct
+        """
         parser = reqparse.RequestParser()
         parser.add_argument('login')
         parser.add_argument('password')
         args = parser.parse_args()
-        username = args['login']
-        password = args['password']
 
-        url = 'https://api.github.com/user'
-        passanduser = base64.urlsafe_b64encode(bytes("%s:%s" % (username, password), 'utf-8')).decode('ascii')
+        login = args.get('login')
+        password = args.get('password')
 
-        headers = {'Authorization': 'Basic ' + passanduser}
+        if login and password:
+            token = base64.urlsafe_b64encode(bytes("%s:%s" % (login, password), 'utf-8')).decode('ascii')
+            headers = {'Authorization': 'Basic ' + token}
 
-        r = requests.get(url, headers=headers)
+            # Confirm that credentials are correct
+            r = requests.get(app.config['GITHUB_USER_LOGIN_ENDPOINT'], headers=headers)
 
-        return
+            if r.status_code == requests.codes.ok:
+                return {'token': token}, requests.codes.ok
+            else:
+                return r.json(), r.status_code
+
+        else:
+            return {'message': 'Missing password or login'}, 401
