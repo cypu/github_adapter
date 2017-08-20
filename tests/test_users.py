@@ -3,9 +3,11 @@ Users endpoints tests.
 """
 
 import requests
-import json
 from flask import Flask
-from flask_testing import TestCase, LiveServerTestCase
+from flask_testing import TestCase
+from api.users import GetFollowers, Login
+from api.repos import CreatePullRequest
+from flask_restful import Api
 
 
 class TestCaseUser(TestCase):
@@ -14,13 +16,9 @@ class TestCaseUser(TestCase):
 
         app = Flask(__name__)
         app.config.from_object('config.TestConfig')
-        from api.users import GetFollowers, Login
-        from api.repos import CreatePullRequest
-        from flask_restful import Api
         api = Api(app)
         api.add_resource(GetFollowers, '/users/<string:user>')
         api.add_resource(Login, '/users/login/')
-        api.add_resource(CreatePullRequest, '/repos/create_pull_request/')
 
         return app
 
