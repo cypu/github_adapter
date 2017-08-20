@@ -6,7 +6,6 @@ import requests
 from flask import Flask
 from flask_testing import TestCase
 from api.users import GetFollowers, Login
-from api.repos import CreatePullRequest
 from flask_restful import Api
 
 
