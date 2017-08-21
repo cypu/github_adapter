@@ -8,9 +8,9 @@ from flask_restful import Resource, reqparse
 from . import app
 
 
-class CreatePullRequest(Resource):
+class CreatePullRequestWithReviews(Resource):
     """
-    Provide the ability to create pull request.
+    Provide the ability to create pull request with requesting reviews.
     """
 
     REQUIRED_ARGUMENTS = ('changeset', 'repository', 'title', 'base', 'reviewers')
@@ -22,6 +22,7 @@ class CreatePullRequest(Resource):
         """
         # branch name
         # full repository name format : 'owner/repo_name'
+
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in self.REQUIRED_ARGUMENTS]
         parser.add_argument('token')
@@ -43,9 +44,11 @@ class CreatePullRequest(Resource):
             r = requests.post(app.config['GITHUB_API_CREATE_PULL_REQUEST'].format(owner=repo_owner, repos=repo_name),
                               data=json.dumps(post_data), headers=headers)
 
-            if r.status_code == requests.codes.ok:
-                # request the reviews to reviewers
-                pass
+            if r.status_code == 201:
+                number = r.json().get('number')
+                resp = self._request_reviews(args.get('token'), repo_owner, repo_name, number, args.get('reviewers'))
+
+                return resp.json(), r.status_code
 
             return r.json(), r.status_code
         else:
@@ -53,5 +56,20 @@ class CreatePullRequest(Resource):
             missing_args = set(self.REQUIRED_ARGUMENTS) - {key for key in args.keys() if args.get(key)}
             return {'message': 'Missing required arguments : ' + ','.join(sorted(list(missing_args)))}, 422
 
-    def request_reviews(self):
-        pass
+    def _request_reviews(self, token, owner, repo, number, reviewers):
+        """
+        
+        :param token: 
+        :param owner: 
+        :param repo: 
+        :param number: 
+        :param reviewers: 
+        :return: 
+        """
+        post_data = {'reviewers': reviewers.split(',')}
+        headers = {'Authorization': 'Basic ' + token}
+        response = requests.post(
+            app.config['GITHUB_API_CREATE_REVIEW_REQUEST'].format(owner=owner, repo=repo, number=number),
+            data=json.dumps(post_data), headers=headers)
+
+        return response

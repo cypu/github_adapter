@@ -12,8 +12,8 @@ api = Api(app)
 
 #  http://flask.pocoo.org/docs/0.12/patterns/packages/  -> Circular Imports
 from .users import GetFollowers, Login
-from .repos import CreatePullRequest
+from .repos import CreatePullRequestWithReviews
 
 api.add_resource(GetFollowers, '/users/<string:user>')
 api.add_resource(Login, '/users/login/')
-api.add_resource(CreatePullRequest, '/repos/create_pull_request/')
+api.add_resource(CreatePullRequestWithReviews, '/repos/create_pull_request/')
