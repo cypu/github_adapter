@@ -16,16 +16,16 @@ class CreatePullRequestWithReviews(Resource):
     REQUIRED_ARGUMENTS = ('changeset', 'repository', 'title', 'base', 'reviewers')
 
     def post(self):
-        """
+        """Handler of POST resquest for creating pull request.
         
-        :return: 
+        :return: JSON with data , status code
         """
         # branch name
         # full repository name format : 'owner/repo_name'
 
         parser = reqparse.RequestParser()
         [parser.add_argument(arg) for arg in self.REQUIRED_ARGUMENTS]
-        parser.add_argument('token')
+        parser.add_argument('token')  # token is also required but it is checking separately
         args = parser.parse_args()
 
         if not args.get('token'):
@@ -57,14 +57,14 @@ class CreatePullRequestWithReviews(Resource):
             return {'message': 'Missing required arguments : ' + ','.join(sorted(list(missing_args)))}, 422
 
     def _request_reviews(self, token, owner, repo, number, reviewers):
-        """
+        """Method responsible for requesting pull request review to reviewers.
         
-        :param token: 
-        :param owner: 
-        :param repo: 
-        :param number: 
-        :param reviewers: 
-        :return: 
+        :param token: Authentication token
+        :param owner: repository owner
+        :param repo: repository name
+        :param number: number of pull request
+        :param reviewers: reviewers (CSV format)
+        :return: HTTP response object
         """
         post_data = {'reviewers': reviewers.split(',')}
         headers = {'Authorization': 'Basic ' + token}

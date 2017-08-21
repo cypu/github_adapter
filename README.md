@@ -6,7 +6,7 @@ This is the web-service which exposes some of github.com's functionalities to it
 1. Creating pull request and requesting reviewers in one time
 1. User authentication 
 
-## Project instalation
+## Project installation
 
 To setup project it is required to have Docker installed.
 Installation steps:
@@ -24,11 +24,11 @@ Each line must contain `key:value` structure.
 Mandatory keys : `login` , `password`, `repository`, `reviewers`
 
 Example:
-login:mylogin
+`login:mylogin
 password:mypassword
 repository:myrepository
 branch:mybranch
-reviewers:reviewer1,reviewer2,reviewer3
+reviewers:reviewer1,reviewer2,reviewer3`
 
 Please note that reviewers is a CSV structure
 And branch should contain changes compared to master
@@ -40,6 +40,7 @@ When you install project locally :
 `python3 run_test.py'
 
 Please remember to have changes on your branch, because system does not create them for tests.
+It is also required to run this command from the root of project.
 
 ## Other notes
 
