@@ -20,11 +20,9 @@ class CreatePullRequestWithReviews(Resource):
         
         :return: JSON with data , status code
         """
-        # branch name
-        # full repository name format : 'owner/repo_name'
-
         parser = reqparse.RequestParser()
-        [parser.add_argument(arg) for arg in self.REQUIRED_ARGUMENTS]
+        for arg in self.REQUIRED_ARGUMENTS:
+            parser.add_argument(arg)
         parser.add_argument('token')  # token is also required but it is checking separately
         args = parser.parse_args()
 
@@ -32,7 +30,7 @@ class CreatePullRequestWithReviews(Resource):
             return {'message': 'Missing authorization token'}, 401
 
         if all(args.get(key) for key in self.REQUIRED_ARGUMENTS):
-            repo_owner, repo_name = args['repository'].split('/')
+            repo_owner, repo_name = args['repository'].split('/')  # full repository name format : 'owner/repo_name'
 
             post_data = {"title": args.get('title'),
                          "body": args.get('body') or "This is a pull request.",
@@ -52,7 +50,6 @@ class CreatePullRequestWithReviews(Resource):
 
             return r.json(), r.status_code
         else:
-
             missing_args = set(self.REQUIRED_ARGUMENTS) - {key for key in args.keys() if args.get(key)}
             return {'message': 'Missing required arguments : ' + ','.join(sorted(list(missing_args)))}, 422
 
