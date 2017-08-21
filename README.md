@@ -39,9 +39,9 @@ This adapter provide endpoints described below :
     Allows user to create a pull request and request reviews to reviewers
     
     It is accesable via POST request and all required parameteers are described here https://developer.github.com/v3/pulls/#create-a-pull-request
-    Moreover it also required auth TOKEN
     
-
+    Moreover it also requires auth TOKEN
+    
 
 ## Setting 'test_config'
 test_config file is should contain data related to github account testing
