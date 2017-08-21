@@ -28,9 +28,13 @@ Mandatory keys : `login` , `password`, `repository`, `reviewers`
 Example: 
 
 `login:mylogin`
+
 `password:mypassword`
+
 `repository:myrepository`
+
 `branch:mybranch`
+
 `reviewers:reviewer1,reviewer2,reviewer3`
 
 Please note that reviewers is a CSV structure
