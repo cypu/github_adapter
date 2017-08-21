@@ -14,6 +14,8 @@ Installation steps:
 1. Being at project root run in terminal run :  `docker build -t github-adapter .` to build docker image 
 1. Run docker image with commnand : `docker run -d -p 5000:5000 github-adapter`
 
+Alternatively it is possible to install project locally through:
+pip3 install -r requirements.txt
 
 
 ## Setting 'test_config'
@@ -25,9 +27,15 @@ Example:
 login:mylogin
 password:mypassword
 repository:myrepository
+branch:mybranch
 reviewers:reviewer1,reviewer2,reviewer3
 
 Please note that reviewers is a CSV structure
+And branch should contain changes compared to master
 
 
 ## Running tests
+
+When you install project locally :
+`python3 run_test.py'
+

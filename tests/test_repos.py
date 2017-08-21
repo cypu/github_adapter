@@ -71,7 +71,7 @@ class TestCaseRepo(TestCase, TestConfigLoaderMixin):
         token = json.loads(login_response.data)['token']
 
         post_data = {
-            'changeset': 'test',
+            'changeset': self.test_config_data.get('branch'),
             'repository': '{}/{}'.format(self.test_config_data.get('login'), self.test_config_data.get('repository')),
             'title': 'example pull request',
             'base': 'master',
