@@ -15,7 +15,9 @@ Installation steps:
 1. Run docker image with commnand : `docker run -d -p 5000:5000 github-adapter`
 
 Alternatively it is possible to install project locally through:
-pip3 install -r requirements.txt
+`pip3 install -r requirements.txt`
+and
+`python3 run.py`
 
 
 ## Setting 'test_config'
