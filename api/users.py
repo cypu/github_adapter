@@ -19,14 +19,30 @@ class GetFollowers(Resource):
         :param user: github login
         :return: json object with list of followers 
         """
-        followers = requests.get(app.config['GITHUB_API_USER_FOLLOWERS'].format(user)).json()
-        follower_fields = ['login', 'email', 'location', 'public_repos']
+        parser = reqparse.RequestParser()
+        parser.add_argument('page', type=int)
+        parser.add_argument('per_page', type=int)
+
+        args = parser.parse_args()
+        page = args.get('page')
+        per_page = args.get('per_page')
+        followers = requests.get(
+            app.config['GITHUB_API_USER_FOLLOWERS'].format(user, page, per_page)).json()
+        follower_fields = ('login', 'email', 'location', 'public_repos')
 
         for index, follower in enumerate(followers):
             follower_details = requests.get(app.config['GITHUB_API_USER_DETAILS'].format(follower['login'])).json()
             followers[index] = {x: follower_details[x] for x in follower_fields}
 
-        return followers
+        response = {
+            'data': followers,
+            'next_page': app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page + 1,
+                                                                                                     per_page),
+            'prev_page': app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page - 1,
+                                                                                                     per_page),
+        }
+
+        return response
 
 
 class Login(Resource):
