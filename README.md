@@ -19,6 +19,29 @@ Alternatively it is possible to install project locally through:
 and
 `python3 run.py`
 
+## API endpoints
+
+This adapter provide endpoints described below :
+
+1. `/users/followers/<string:user>`
+
+    Allows user to get details of its followers.
+    
+    It is accesable via GET reqest and there are optional pagination params `page` and `per_page`
+
+1. `/users/login/`
+    
+    Allows user to get authentication TOKEN
+    
+    It is accesable via POST request and user need to provide `login` and `password`
+1. `/repos/create_pull_request/`  
+
+    Allows user to create a pull request and request reviews to reviewers
+    
+    It is accesable via POST request and all required parameteers are described here https://developer.github.com/v3/pulls/#create-a-pull-request
+    Moreover it also required auth TOKEN
+    
+
 
 ## Setting 'test_config'
 test_config file is should contain data related to github account testing
