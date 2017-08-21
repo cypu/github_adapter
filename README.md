@@ -39,3 +39,12 @@ And branch should contain changes compared to master
 When you install project locally :
 `python3 run_test.py'
 
+Please remember to have changes on your branch, because system does not create them for tests.
+
+## Other notes
+
+This application requires to set it on HTTPS server to be more safe.
+I also tried set memcache for caching responses with followers details.
+I think it also may improve speed of response in some cases.
+
+

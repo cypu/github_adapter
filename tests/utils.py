@@ -2,6 +2,7 @@ import os
 
 
 class TestConfigLoaderMixin(object):
+    """Loading test data mixin."""
 
     def load_test_config(self):
         test_config = os.path.join(os.getcwd(), 'test_config')
