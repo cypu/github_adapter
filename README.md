@@ -9,13 +9,25 @@ This is the web-service which exposes some of github.com's functionalities to it
 ## Project instalation
 
 To setup project it is required to have Docker installed.
-Instalation steps:
+Installation steps:
 1. Set up 'test_config' - desribed below
 1. Being at project root run in terminal run :  `docker build -t github-adapter .` to build docker image 
-1. Run dorcker image with commnand : `docker run -d -p 5000:5000 github-adapter`
-1.
+1. Run docker image with commnand : `docker run -d -p 5000:5000 github-adapter`
+
 
 
 ## Setting 'test_config'
+test_config file is should contain data related to github account testing
+Each line must contain `key:value` structure.
+Mandatory keys : `login` , `password`, `repository`, `reviewers`
+
+Example:
+login:mylogin
+password:mypassword
+repository:myrepository
+reviewers:reviewer1,reviewer2,reviewer3
+
+Please note that reviewers is a CSV structure
+
 
 ## Running tests
