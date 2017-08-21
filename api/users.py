@@ -24,8 +24,8 @@ class GetFollowers(Resource):
         parser.add_argument('per_page', type=int)
 
         args = parser.parse_args()
-        page = args.get('page')
-        per_page = args.get('per_page')
+        page = args.get('page') or 1
+        per_page = args.get('per_page') or 10
         followers = requests.get(
             app.config['GITHUB_API_USER_FOLLOWERS'].format(user, page, per_page)).json()
         follower_fields = ('login', 'email', 'location', 'public_repos')
