@@ -9,9 +9,11 @@ from flask import Flask
 from flask_testing import TestCase
 from api.users import GetFollowers, Login
 from flask_restful import Api
+from utils import TestConfigLoaderMixin
 
 
-class TestCaseUser(TestCase):
+class TestCaseUser(TestCase, TestConfigLoaderMixin):
+
     def __init__(self, *args, **kwargs):
         super(TestCaseUser, self).__init__(*args, **kwargs)
         self.load_test_config()
@@ -24,18 +26,9 @@ class TestCaseUser(TestCase):
         api.add_resource(Login, '/users/login/')
         return app
 
-    def load_test_config(self):
-        p = os.path.join(os.getcwd(), 'test_config')
-        self.credentials = {}
-
-        with open(p, 'r') as f:
-            for l in f.readlines():
-                k, v = l.split(':')
-                self.credentials.update({k.strip(): v.strip()})
-
     def test_correct_login_and_password(self):
-        post_data = {'login': self.credentials.get('login'),
-                     'password': self.credentials.get('password')}
+        post_data = {'login': self.test_config_data.get('login'),
+                     'password': self.test_config_data.get('password')}
         response = self.client.post("/users/login/", data=post_data)
         self.assertEqual(response.status_code, 200)
 

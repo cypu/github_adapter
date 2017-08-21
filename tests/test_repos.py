@@ -4,7 +4,7 @@ Repos endpoints tests.
 
 import requests
 import json
-import os
+from utils import TestConfigLoaderMixin
 from flask import Flask
 from flask_testing import TestCase
 from flask_restful import Api
@@ -12,7 +12,8 @@ from api.repos import CreatePullRequestWithReviews
 from api.users import Login
 
 
-class TestCaseRepo(TestCase):
+class TestCaseRepo(TestCase, TestConfigLoaderMixin):
+
     def __init__(self, *args, **kwargs):
         super(TestCaseRepo, self).__init__(*args, **kwargs)
         self.load_test_config()
@@ -24,15 +25,6 @@ class TestCaseRepo(TestCase):
         api.add_resource(CreatePullRequestWithReviews, '/repos/create_pull_request/')
         api.add_resource(Login, '/users/login/')
         return app
-
-    def load_test_config(self):
-        test_config = os.path.join(os.getcwd(), 'test_config')
-        self.test_config_data = {}
-
-        with open(test_config, 'r') as f:
-            for line in f.readlines():
-                k, v = line.split(':')
-                self.test_config_data.update({k.strip(): v.strip()})
 
     def close_pull_request(self, number, token):
         patch_url = self.app.config.get('GITHUB_API_UPDATE_PULL_REQUEST').format(owner=self.test_config_data['login'],

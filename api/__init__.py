@@ -5,8 +5,8 @@ Github API adapter.
 from flask import Flask
 from flask_restful import Api
 
-
 app = Flask(__name__)
+app.config.from_object('config.DevConfig')
 api = Api(app)
 
 #  http://flask.pocoo.org/docs/0.12/patterns/packages/  -> Circular Imports
