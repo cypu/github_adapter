@@ -25,12 +25,13 @@ test_config file is should contain data related to github account testing
 Each line must contain `key:value` structure.
 Mandatory keys : `login` , `password`, `repository`, `reviewers`
 
-Example:
-`login:mylogin
-password:mypassword
-repository:myrepository
-branch:mybranch
-reviewers:reviewer1,reviewer2,reviewer3`
+Example: 
+
+`login:mylogin`
+`password:mypassword`
+`repository:myrepository`
+`branch:mybranch`
+`reviewers:reviewer1,reviewer2,reviewer3`
 
 Please note that reviewers is a CSV structure
 And branch should contain changes compared to master
