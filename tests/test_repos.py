@@ -13,13 +13,17 @@ from api.users import Login
 
 
 class TestCaseRepo(TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(TestCaseRepo, self).__init__(*args, **kwargs)
+        self.load_test_config()
+
     def create_app(self):
         app = Flask(__name__)
         app.config.from_object('config.TestConfig')
         api = Api(app)
         api.add_resource(CreatePullRequest, '/repos/create_pull_request/')
         api.add_resource(Login, '/users/login/')
-        self.load_test_config()
         return app
 
     def load_test_config(self):

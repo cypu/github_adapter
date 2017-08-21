@@ -12,14 +12,16 @@ from flask_restful import Api
 
 class TestCaseUser(TestCase):
 
-    def create_app(self):
+    def __init__(self, *args, **kwargs):
+        super(TestCaseUser, self).__init__(*args, **kwargs)
+        self.load_test_config()
 
+    def create_app(self):
         app = Flask(__name__)
         app.config.from_object('config.TestConfig')
         api = Api(app)
         api.add_resource(GetFollowers, '/users/<string:user>')
         api.add_resource(Login, '/users/login/')
-        self.load_test_config()
         return app
 
     def load_test_config(self):
