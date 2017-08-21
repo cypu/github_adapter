@@ -4,7 +4,6 @@ Project configuration.
 
 
 class Config(object):
-
     #  Github Api settings
     GITHUB_API_USER_DETAILS = "https://api.github.com/users/{}"
     GITHUB_API_USER_FOLLOWERS = "https://api.github.com/users/{}/followers?page={}&per_page={}"
@@ -15,11 +14,9 @@ class Config(object):
 
 
 class TestConfig(Config):
-
     TESTING = True
 
 
 class DevConfig(Config):
-
     SERVER_URL = "http://0.0.0.0:5000"
     DEBUG = True

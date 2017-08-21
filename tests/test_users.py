@@ -11,7 +11,6 @@ from utils import TestConfigLoaderMixin
 
 
 class TestCaseUser(TestCase, TestConfigLoaderMixin):
-
     def __init__(self, *args, **kwargs):
         super(TestCaseUser, self).__init__(*args, **kwargs)
         self.load_test_config()

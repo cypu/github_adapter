@@ -13,7 +13,6 @@ from api.users import Login
 
 
 class TestCaseRepo(TestCase, TestConfigLoaderMixin):
-
     def __init__(self, *args, **kwargs):
         super(TestCaseRepo, self).__init__(*args, **kwargs)
         self.load_test_config()
@@ -28,7 +27,8 @@ class TestCaseRepo(TestCase, TestConfigLoaderMixin):
 
     def close_pull_request(self, number, token):
         patch_url = self.app.config.get('GITHUB_API_UPDATE_PULL_REQUEST').format(owner=self.test_config_data['login'],
-                                                                                 repo=self.test_config_data['repository'],
+                                                                                 repo=self.test_config_data[
+                                                                                     'repository'],
                                                                                  number=number)
         headers = {'Authorization': 'Basic ' + token}
         requests.patch(patch_url, data=json.dumps({'state': 'closed'}), headers=headers)
@@ -83,5 +83,3 @@ class TestCaseRepo(TestCase, TestConfigLoaderMixin):
         self.assertEqual(response.status_code, 201)
         number = json.loads(response.data)['number']
         self.close_pull_request(number, token)
-
-
