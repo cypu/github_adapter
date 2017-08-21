@@ -44,15 +44,25 @@ And branch should contain changes compared to master
 ## Running tests
 
 When you install project locally :
-`python3 run_test.py'
+`python3 run_test.py`
 
 Please remember to have changes on your branch, because system does not create them for tests.
 It is also required to run this command from the root of project.
+
+It is also possible to run test via docker : 
+
+1. `docker exec -i -t <container_id> /bin/bash`
+1. `python3 run_test.py`
+
+Remeber that you need to create your test_config firstly befor you build the docker image.
 
 ## Other notes
 
 This application requires to set it on HTTPS server to be more safe.
 I also tried set memcache for caching responses with followers details.
 I think it also may improve speed of response in some cases.
+
+I am also aware that in complete solution there should be more tests covering edge cases and exception handling in API endpoints.
+I hope that implemented tests cover basic functionality of github_adapter and are enough to present how that adapter works.
 
 
