@@ -19,6 +19,29 @@ Alternatively it is possible to install project locally through:
 and
 `python3 run.py`
 
+## API endpoints
+
+This adapter provide endpoints described below :
+
+1. `/users/followers/<string:user>`
+
+    Allows user to get details of its followers.
+    
+    It is accesable via GET reqest and there are optional pagination params `page` and `per_page`
+
+1. `/users/login/`
+    
+    Allows user to get authentication TOKEN
+    
+    It is accesable via POST request and user need to provide `login` and `password`
+1. `/repos/create_pull_request/`  
+
+    Allows user to create a pull request and request reviews to reviewers
+    
+    It is accesable via POST request and all required parameteers are described here https://developer.github.com/v3/pulls/#create-a-pull-request
+    
+    Moreover it also requires auth TOKEN
+    
 
 ## Setting 'test_config'
 test_config file is should contain data related to github account testing
@@ -44,15 +67,25 @@ And branch should contain changes compared to master
 ## Running tests
 
 When you install project locally :
-`python3 run_test.py'
+`python3 run_test.py`
 
 Please remember to have changes on your branch, because system does not create them for tests.
 It is also required to run this command from the root of project.
+
+It is also possible to run test via docker : 
+
+1. `docker exec -i -t <container_id> /bin/bash`
+1. `python3 run_test.py`
+
+Remeber that you need to create your test_config firstly befor you build the docker image.
 
 ## Other notes
 
 This application requires to set it on HTTPS server to be more safe.
 I also tried set memcache for caching responses with followers details.
 I think it also may improve speed of response in some cases.
+
+I am also aware that in complete solution there should be more tests covering edge cases and exception handling in API endpoints.
+I hope that implemented tests cover basic functionality of github_adapter and are enough to present how that adapter works.
 
 
