@@ -15,6 +15,7 @@ class Config(object):
 
 class TestConfig(Config):
     TESTING = True
+    SERVER_URL = "http://0.0.0.0:5000"
 
 
 class DevConfig(Config):

@@ -5,7 +5,7 @@ API endpoints related to users.
 import requests
 import base64
 from flask_restful import Resource, reqparse
-from . import app
+import flask
 
 
 class GetFollowers(Resource):
@@ -27,18 +27,18 @@ class GetFollowers(Resource):
         page = args.get('page')
         per_page = args.get('per_page')
         followers = requests.get(
-            app.config['GITHUB_API_USER_FOLLOWERS'].format(user, page, per_page)).json()
+            flask.current_app.config['GITHUB_API_USER_FOLLOWERS'].format(user, page, per_page)).json()
         follower_fields = ('login', 'email', 'location', 'public_repos')
 
         for index, follower in enumerate(followers):
-            follower_details = requests.get(app.config['GITHUB_API_USER_DETAILS'].format(follower['login'])).json()
+            follower_details = requests.get(flask.current_app.config['GITHUB_API_USER_DETAILS'].format(follower['login'])).json()
             followers[index] = {x: follower_details[x] for x in follower_fields}
 
         response = {
             'data': followers,
-            'next_page': app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page + 1,
+            'next_page': flask.current_app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page + 1,
                                                                                                      per_page),
-            'prev_page': app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page - 1,
+            'prev_page': flask.current_app.config['SERVER_URL'] + '/users/followers/{}?page={}&per_page={}'.format(user, page - 1,
                                                                                                      per_page),
         }
 
@@ -69,7 +69,7 @@ class Login(Resource):
             headers = {'Authorization': 'Basic ' + token}
 
             # Confirm that credentials are correct
-            r = requests.get(app.config['GITHUB_USER_LOGIN_ENDPOINT'], headers=headers)
+            r = requests.get(flask.current_app.config['GITHUB_USER_LOGIN_ENDPOINT'], headers=headers)
 
             if r.status_code == requests.codes.ok:
                 return {'token': token}, requests.codes.ok

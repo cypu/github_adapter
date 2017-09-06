@@ -5,7 +5,7 @@ API endpoints related to repositories.
 import requests
 import json
 from flask_restful import Resource, reqparse
-from . import app
+import flask
 
 
 class CreatePullRequestWithReviews(Resource):
@@ -39,7 +39,7 @@ class CreatePullRequestWithReviews(Resource):
                          "base": args.get('base')}
 
             headers = {'Authorization': 'Basic ' + args.get('token')}
-            r = requests.post(app.config['GITHUB_API_CREATE_PULL_REQUEST'].format(owner=repo_owner, repos=repo_name),
+            r = requests.post(flask.current_app.config['GITHUB_API_CREATE_PULL_REQUEST'].format(owner=repo_owner, repos=repo_name),
                               data=json.dumps(post_data), headers=headers)
 
             if r.status_code == 201:
@@ -66,7 +66,7 @@ class CreatePullRequestWithReviews(Resource):
         post_data = {'reviewers': reviewers.split(',')}
         headers = {'Authorization': 'Basic ' + token}
         response = requests.post(
-            app.config['GITHUB_API_CREATE_REVIEW_REQUEST'].format(owner=owner, repo=repo, number=number),
+            flask.current_app.config['GITHUB_API_CREATE_REVIEW_REQUEST'].format(owner=owner, repo=repo, number=number),
             data=json.dumps(post_data), headers=headers)
 
         return response
