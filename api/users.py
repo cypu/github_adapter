@@ -19,7 +19,7 @@ class GetFollowers(Resource):
         followers_with_details = []
         follower_fields = ('login', 'email', 'location', 'public_repos')
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=len(followers)) as executor:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
             loop = asyncio.get_event_loop()
             futures = [
                 loop.run_in_executor(
