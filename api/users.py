@@ -6,6 +6,8 @@ import requests
 import base64
 from flask_restful import Resource, reqparse
 import flask
+import asyncio
+import concurrent.futures
 
 
 class GetFollowers(Resource):
@@ -13,12 +15,36 @@ class GetFollowers(Resource):
     Provide tha ability to get github user followers.
     """
 
+    async def get_followers_details(self, followers):
+        followers_with_details = []
+        follower_fields = ('login', 'email', 'location', 'public_repos')
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(followers)) as executor:
+            loop = asyncio.get_event_loop()
+            futures = [
+                loop.run_in_executor(
+                    executor,
+                    requests.get,
+                    flask.current_app.config['GITHUB_API_USER_DETAILS'].format(follower['login'])
+                )
+                for follower in followers
+            ]
+
+            for response in await asyncio.gather(*futures):
+                follower = response.json()
+                follower_details = {x: follower[x] for x in follower_fields}
+                followers_with_details.append(follower_details)
+
+        return followers_with_details
+
+
     def get(self, user):
         """Request for a list of followers for specific user.
         
         :param user: github login
         :return: json object with list of followers 
         """
+
         parser = reqparse.RequestParser()
         parser.add_argument('page', type=int)
         parser.add_argument('per_page', type=int)
@@ -28,11 +54,10 @@ class GetFollowers(Resource):
         per_page = args.get('per_page') or 10
         followers = requests.get(
             flask.current_app.config['GITHUB_API_USER_FOLLOWERS'].format(user, page, per_page)).json()
-        follower_fields = ('login', 'email', 'location', 'public_repos')
 
-        for index, follower in enumerate(followers):
-            follower_details = requests.get(flask.current_app.config['GITHUB_API_USER_DETAILS'].format(follower['login'])).json()
-            followers[index] = {x: follower_details[x] for x in follower_fields}
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        followers = loop.run_until_complete(asyncio.gather(self.get_followers_details(followers)))
 
         response = {
             'data': followers,
