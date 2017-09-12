@@ -4,7 +4,7 @@ Repos endpoints tests.
 
 import requests
 import json
-from utils import TestConfigLoaderMixin
+from .utils import TestConfigLoaderMixin
 from flask import Flask
 from flask_testing import TestCase
 from flask_restful import Api

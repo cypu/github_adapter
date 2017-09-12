@@ -67,7 +67,7 @@ And branch should contain changes compared to master
 ## Running tests
 
 When you install project locally :
-`python3 run_test.py`
+`pytest`
 
 Please remember to have changes on your branch, because system does not create them for tests.
 It is also required to run this command from the root of project.
@@ -75,7 +75,7 @@ It is also required to run this command from the root of project.
 It is also possible to run test via docker : 
 
 1. `docker exec -i -t <container_id> /bin/bash`
-1. `python3 run_test.py`
+1. `pytest`
 
 Remeber that you need to create your test_config firstly befor you build the docker image.
 

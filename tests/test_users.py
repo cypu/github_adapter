@@ -7,7 +7,7 @@ from flask import Flask
 from flask_testing import TestCase
 from api.users import GetFollowers, Login
 from flask_restful import Api
-from utils import TestConfigLoaderMixin
+from .utils import TestConfigLoaderMixin
 
 
 class TestCaseUser(TestCase, TestConfigLoaderMixin):
