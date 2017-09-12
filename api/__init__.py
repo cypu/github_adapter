@@ -9,7 +9,6 @@ from .repos import CreatePullRequestWithReviews
 
 
 app = Flask(__name__)
-app.config.from_object('config.DevConfig')
 api = Api(app)
 
 api.add_resource(GetFollowers, '/users/followers/<string:user>')

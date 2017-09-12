@@ -4,29 +4,23 @@ Repos endpoints tests.
 
 import requests
 import json
+import unittest
+from api import app
 from .utils import TestConfigLoaderMixin
-from flask import Flask
-from flask_testing import TestCase
-from flask_restful import Api
 from api.repos import CreatePullRequestWithReviews
-from api.users import Login
 
 
-class TestCaseRepo(TestCase, TestConfigLoaderMixin):
+class TestCaseRepo(unittest.TestCase, TestConfigLoaderMixin):
     def __init__(self, *args, **kwargs):
         super(TestCaseRepo, self).__init__(*args, **kwargs)
         self.load_test_config()
 
-    def create_app(self):
-        app = Flask(__name__)
+    def setUp(self):
         app.config.from_object('config.TestConfig')
-        api = Api(app)
-        api.add_resource(CreatePullRequestWithReviews, '/repos/create_pull_request/')
-        api.add_resource(Login, '/users/login/')
-        return app
+        self.client = app.test_client()
 
     def close_pull_request(self, number, token):
-        patch_url = self.app.config.get('GITHUB_API_UPDATE_PULL_REQUEST').format(owner=self.test_config_data['login'],
+        patch_url = self.client.config.get('GITHUB_API_UPDATE_PULL_REQUEST').format(owner=self.test_config_data['login'],
                                                                                  repo=self.test_config_data[
                                                                                      'repository'],
                                                                                  number=number)

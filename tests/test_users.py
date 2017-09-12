@@ -3,25 +3,19 @@ Users endpoints tests.
 """
 
 import json
-from flask import Flask
-from flask_testing import TestCase
-from api.users import GetFollowers, Login
-from flask_restful import Api
+import unittest
+from api import app
 from .utils import TestConfigLoaderMixin
 
 
-class TestCaseUser(TestCase, TestConfigLoaderMixin):
+class TestCaseUser(unittest.TestCase, TestConfigLoaderMixin):
     def __init__(self, *args, **kwargs):
         super(TestCaseUser, self).__init__(*args, **kwargs)
         self.load_test_config()
 
-    def create_app(self):
-        app = Flask(__name__)
+    def setUp(self):
         app.config.from_object('config.TestConfig')
-        api = Api(app)
-        api.add_resource(GetFollowers, '/users/followers/<string:user>')
-        api.add_resource(Login, '/users/login/')
-        return app
+        self.client = app.test_client()
 
     def test_correct_login_and_password(self):
         post_data = {'login': self.test_config_data.get('login'),
